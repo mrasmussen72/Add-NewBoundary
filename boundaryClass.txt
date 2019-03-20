@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Net;
+
+/// <summary>
+/// Summary description for Class1
+/// </summary>
+public class Boundary
+{
+    public string BoundaryName { get; set; }
+    public string RangeStartIP { get; set; }
+    public string RangeEndIP { get; set; }
+    public Boundary()
+    {
+        //
+        // TODO: Add constructor logic here
+        //
+    }
+
+    static public bool DoesIPExistInBoundaryList (List<IPAddress> IPList, List<Boundary> BoundaryList)
+    {
+        bool exists = false;
+        foreach(IPAddress ip in IPList)
+        {
+            if(exists == true)
+            {
+                break;
+            }
+            foreach(Boundary boundary in BoundaryList)
+            {
+                // is the boundary a range
+
+                // current IP
+                byte[] parseIP = IPAddress.Parse(ip.ToString()).GetAddressBytes();
+                parseIP.Reverse();
+                uint parseIPUint = System.BitConverter.ToUInt32(parseIP, 0);
+
+                // start IP
+                byte[] startIP = IPAddress.Parse(boundary.RangeStartIP.ToString()).GetAddressBytes();
+                startIP.Reverse();
+                uint startIPUint = System.BitConverter.ToUInt32(startIP, 0);
+
+                // end IP
+                byte[] endIP = IPAddress.Parse(boundary.RangeEndIP.ToString()).GetAddressBytes();
+                endIP.Reverse();
+                uint endIPUint = System.BitConverter.ToUInt32(endIP, 0);
+
+                if((startIPUint < parseIPUint) && (parseIPUint < endIPUint))
+                {
+                    exists = true;
+                    break;
+                }
+            }
+        }
+        return exists;
+    }
+}

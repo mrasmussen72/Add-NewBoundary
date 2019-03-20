@@ -1,0 +1,24 @@
+        public bool DoesIPExistInRange(string startIpRange, string endIpRange, string ipToCheck)
+        {
+            bool exists = false;
+            
+            byte[] startIpBytes = IPAddress.Parse(startIpRange).GetAddressBytes();
+            startIpBytes.Reverse();
+            uint startIpUInt = System.BitConverter.ToUInt32(startIpBytes, 0);
+
+            byte[] endIpBytes = IPAddress.Parse(endIpRange).GetAddressBytes();
+            endIpBytes.Reverse();
+            uint endIpUInt = System.BitConverter.ToUInt32(endIpBytes, 0);
+
+            byte[] ipToCheckBytes = IPAddress.Parse(ipToCheck).GetAddressBytes();
+            ipToCheckBytes.Reverse();
+            uint ipToCheckUInt = System.BitConverter.ToUInt32(ipToCheckBytes, 0);
+
+            if ((startIpUInt < ipToCheckUInt) && (ipToCheckUInt < endIpUInt))
+            {
+                exists = true;
+               
+            }
+
+            return exists;
+        }
